@@ -1,0 +1,61 @@
+//---------------------------------------
+// module name : interleaver_top_vlg_tst//
+// Design : Wang Zi Chen ,Zhang Zhe Ren ,Wang Han Xiang //
+// coding : Wang Zi Chen//
+// simulate : Wang Zi Chen,Zhang Zhe Ren//
+// review ：Zhang Zhe Ren ,Wang Han Xiang//
+// --------------------------------------
+`timescale 1 ps/ 1 ps
+module interleaver_top_vlg_tst();
+
+reg [12:0] K;
+reg clk_in;
+reg rst_n;
+reg sleep_mode;
+// wires                                               
+wire [12:0]  Pi2n;
+wire [12:0]  Pi2n_plus_1;
+wire [12:0]  Pi2n_plus_3K4;
+wire [12:0]  Pi2n_plus_3K4_plus_1;
+wire [12:0]  Pi2n_plus_K2;
+wire [12:0]  Pi2n_plus_K2_plus_1;
+wire [12:0]  Pi2n_plus_K4;
+wire [12:0]  Pi2n_plus_K4_plus_1;
+                      
+interleaver_top i1 (
+
+	.K(K),
+	.Pi2n(Pi2n),
+	.Pi2n_plus_1(Pi2n_plus_1),
+	.Pi2n_plus_3K4(Pi2n_plus_3K4),
+	.Pi2n_plus_3K4_plus_1(Pi2n_plus_3K4_plus_1),
+	.Pi2n_plus_K2(Pi2n_plus_K2),
+	.Pi2n_plus_K2_plus_1(Pi2n_plus_K2_plus_1),
+	.Pi2n_plus_K4(Pi2n_plus_K4),
+	.Pi2n_plus_K4_plus_1(Pi2n_plus_K4_plus_1),
+	.clk_in(clk_in),
+	.rst_n(rst_n),
+	.sleep_mode(sleep_mode)
+);
+initial                                                
+begin                                                  
+clk_in = 0 ;
+forever #(10) clk_in = ~clk_in;                    
+end                                     
+
+
+initial                                                               
+begin          
+sleep_mode = 1;                                        
+#(5)  rst_n = 0;
+#(10) rst_n = 1;
+#(10) K = 1504;  
+#(50) wait(Pi2n == 0) 	K = 1024;      
+#(300)wait(Pi2n == 0) 	K = 1952;  
+#(300)wait(Pi2n == 0) 	K = 5248;  
+#(300)wait(Pi2n == 0) 	K = 0;  
+    
+                                 
+end                                                           
+endmodule
+
